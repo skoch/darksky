@@ -3,7 +3,7 @@ var Main = new(function()
 	// static
 	var _self = this;
 	var _debug = false;
-	var _apiKey = '';
+	var _apiKey = 'a04ca3cc3da6efe8dd6c74f37f16b81e';
 	var _coords = {};
 	var _weather = {};
 
@@ -37,16 +37,16 @@ var Main = new(function()
 			case '#nutshell' :
 				$($('ul').children( 'li' )[0]).addClass( 'active' );
 			break;
-			case '#hourly' :
+			case '#dayPrecipitation' :
 				$($('ul').children( 'li' )[1]).addClass( 'active' );
 			break;
-			case '#day' :
+			case '#hourPrecipitation' :
 				$($('ul').children( 'li' )[2]).addClass( 'active' );
 			break;
 		}
 
-		$('#hourly').addClass( 'hide' );
-		$('#day').addClass( 'hide' );
+		$('#hourPrecipitation').addClass( 'hide' );
+		$('#dayPrecipitation').addClass( 'hide' );
 		$('#nutshell').addClass( 'hide' );
 
 		$( $hash ).removeClass( 'hide' );
@@ -58,8 +58,8 @@ var Main = new(function()
 		// console.log( '$evt', $( $evt.target ).children( 'a' ).context.hash );
 
 		var hash = $( $evt.target ).children( 'a' ).context.hash;
-		$('#hourly').addClass( 'hide' );
-		$('#day').addClass( 'hide' );
+		$('#hourPrecipitation').addClass( 'hide' );
+		$('#dayPrecipitation').addClass( 'hide' );
 		$('#nutshell').addClass( 'hide' );
 
 		$( hash ).removeClass( 'hide' );
@@ -149,7 +149,7 @@ var Main = new(function()
 			var item = '<dl class=""><dt>'+_parseTimestamp( _weather.hourPrecipitation[i].time )+'</dt><dd>'+
 				probability+'% chance of '+_weather.hourPrecipitation[i].type+'<br>('
 					+_weather.hourPrecipitation[i].intensity+' &plusmn;'+_weather.hourPrecipitation[i].error+')</dd></dl>';
-			$( '#hourly' ).append( item );
+			$( '#hourPrecipitation' ).append( item );
 			low[i] = 15;
 			med[i] = 30;
 			high[i] = 45;
@@ -164,21 +164,28 @@ var Main = new(function()
 
 		// console.log( 'valuesy_intensity', valuesy_intensity );
 
-		var r = Raphael( "chart-div" );
+		var r = Raphael( "hour-intensity" );
 		// r.linechart( 0, 0, 640, 480, valuesx, [valuesy_probability, valuesy_intensity_top, valuesy_intensity, valuesy_intensity_bottom], { shade: true, smooth: true });
 		// r.linechart( 10, 0, 630, 470, [valuesx], [valuesy_intensity], { shade: true, axis: "0 0 1 1", smooth: true, axisxstep: 4, axisystep: 3, colors: ["#2f69bf", "#2f69bf"] });
-		r.linechart( 0, 0, 320, 200, [valuesx, valuesx, valuesx, [0, 59]], [valuesy_intensity, valuesy_intensity_top,  valuesy_intensity_bottom, [0, 75]], { shade: true, axis: "0 0 1 0", smooth: true, axisxstep: 4, colors: ["#2f69bf", "#a2bf2f", "#bf5a2f", "transparent"] });
+		r.linechart( 0, 0, 320, 200, [valuesx, valuesx, valuesx, [0, 59]], [valuesy_intensity, valuesy_intensity_top,  valuesy_intensity_bottom, [0, 75]], { shade: true, axis: "0 0 1 1", smooth: true, axisxstep: 4, colors: ["#2f69bf", "#a2bf2f", "#bf5a2f", "transparent"] });
 		r.linechart( 0, 0, 320, 200, [valuesx, [0, 59]], [low, med, high, [0, 75]], { colors: ["#2f69bf", "#a2bf2f", "#bf5a2f", "transparent"], dash: "-" });
 
+		var r = Raphael( "day-percent" );
+		r.linechart( 0, 0, 320, 200, [valuesx, [0, 59]], [valuesy_probability, [0, 100]], { shade: true, axis: "0 0 1 1", smooth: true, axisxstep: 4, colors: ["#2f69bf", "transparent"] });
+
+		valuesx = [];
+		var probs = [];
 		for( var i = 0; i < _weather.dayPrecipitation.length; i++ )
 		{
+			valuesx[i] = i;
 			var probability = Math.round( _weather.dayPrecipitation[i].probability * 100 );
+			probs[i] = probability;
 			var item = '<dl class=""><dt>'+_weather.dayPrecipitation[i].temp+'&#176;F @ '+
 			_parseTimestamp( _weather.dayPrecipitation[i].time )+'</dt><dd>'+probability+'% chance of '+
 			_weather.dayPrecipitation[i].type+'<br>Cloud Cover: '+_weather.dayPrecipitation[i].cloudCover+
 			'<br>Relative Humidity: '+_weather.dayPrecipitation[i].relHumidity+'</dd></dl>';
-			$( '#day' ).append( item );
-			_weather.dayPrecipitation[i]
+			$( '#dayPrecipitation' ).append( item );
+			// console.log( $( '#dayPrecipitation' ) );
 			/*
 			cloudCover: 0.75
 			probability: 0.07
@@ -187,7 +194,12 @@ var Main = new(function()
 			time: 1360792800
 			type: "rain"
 			 */
+
 		}
+		// console.log( 'valuesx', valuesx.length );
+		// console.log( 'probs', probs.length );
+		var r = Raphael( "next-twenty-four-percent" );
+		r.linechart( 0, 0, 320, 200, [valuesx, [0, 24]], [probs, [0, 100]], { shade: true, axis: "0 0 1 1", smooth: true, axisxstep: 3, colors: ["#2f69bf", "transparent"] });
 	};
 
 	function _parseTimestamp( $timestamp )

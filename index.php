@@ -1,5 +1,5 @@
 <?php
-	define( 'IS_DEBUG', false );
+	define( 'IS_DEBUG', true );
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +20,9 @@
       {
         display: none;
       }
-      #chart-div
+      #hour-intensity,
+      #next-twenty-four-percent,
+      #day-percent
       {
         /*-moz-border-radius: 10px;
         -webkit-border-radius: 10px;*/
@@ -62,8 +64,8 @@
           <div class="nav-collapse collapse">
             <ul class="nav">
               <li class="active"><a href="#nutshell">Nutshell</a></li>
-              <li><a href="#hourly">Hourly</a></li>
-              <li><a href="#day">Day</a></li>
+              <li><a href="#dayPrecipitation">Next 24 Hours</a></li>
+              <li><a href="#hourPrecipitation">Next Hour</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -74,9 +76,9 @@
 
 		<div class="row-fluid">
 			<div id="nutshell" class="span5">
-        <div id="chart-div"></div>
+        <div id="hour-intensity"></div>
         <dl id="updateIn">
-          <dt>Refresh at</dt>
+          <dt>Refresh</dt>
           <dd></dd>
         </dl>
 				<dl id="isPrecipitating">
@@ -108,10 +110,13 @@
 					<dd>0-2: None</dd><dd>2-15: Sporadic</dd><dd>15-30: Light</dd><dd>30-45: Moderate</dd><dd>45-75: Heavy</dd>
 				</dl>
 			</div>
-      <div id="day" class="span5 hide">
+      <div id="dayPrecipitation" class="span5 hide">
+        <div id="next-twenty-four-percent"></div>
         <!-- <div id="dayPrecipitation"></div> -->
       </div>
-			<div id="hourly" class="span5 hide">
+			<div id="hourPrecipitation" class="span5 hide">
+        <div id="day-percent"></div>
+
 				<!-- <div id="hourPrecipitation"></div> -->
 			</div>
 		</div>
