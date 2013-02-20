@@ -161,14 +161,14 @@
       </div>
       <div id="dayPrecipitation" class="tab-raphael span3">
         <table class="table table-striped table-condensed text-center">
-          <thead><tr><th>Time</th><th>Probability</th><th>Type</th><th>Humidity</th><th>Cloud Cover</th></tr></thead>
+          <thead><tr><th>Time</th><th>Temp</th><th>Probability</th><th>Type</th><th>Humidity</th><th>Clouds</th></tr></thead>
           <tbody>
           </tbody>
         </table>
       </div>
       <div id="hourPrecipitation" class="tab-raphael span3">
         <table class="table table-striped table-condensed text-center">
-          <thead><tr><th>Time</th><th>Temp</th><th>Probability</th><th>Intensity (error)</th></tr></thead>
+          <thead><tr><th>Time</th><th>Probability</th><th>Type</th><th>Intensity (error)</th></tr></thead>
           <tbody>
           </tbody>
         </table>
