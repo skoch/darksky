@@ -10,31 +10,59 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
+    <!-- <link href='http://fonts.googleapis.com/css?family=Russo+One' rel='stylesheet' type='text/css'> -->
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu:300,700' rel='stylesheet' type='text/css'>
+
     <!-- Le styles -->
     <link href="includes/css/vendor/bootstrap.css" rel="stylesheet">
     <style>
       body {
+        background-color: #f9f9f9;
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+        font-family: 'Ubuntu', sans-serif;
       }
-      .hide
+      .google-fontify
       {
-        display: none;
+        font-weight: 300;
+        font-size: 20px;
       }
-      #hour-intensity,
-      #next-twenty-four-percent,
-      #day-percent
+      #raphael
       {
-        /*-moz-border-radius: 10px;
-        -webkit-border-radius: 10px;*/
+        background-color: #fff;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
         -webkit-box-shadow: 0 1px 3px #666;
-        /*background: #ddd url(http://raphaeljs.com/images/bg.png);*/
-        /*margin: 0 auto;*/
         width: 320px;
-        height: 220px;
+        height: 1020px;
         position: relative;
         left: -20px;
       }
+      #dayPrecipitation,
+      #hourPrecipitation
+      {
+        font-size: 13px;
+        left: -23px;
+      }
+      .tab-raphael
+      {
+        display: block !important;
+        position: absolute;
+        top: -9999px;
+      }
+      .tab-raphael.active
+      {
+        position: relative;
+        top: 0;
+      }
+      .table td
+      {
+         text-align: center;
+      }
+      .table-striped tbody > tr:nth-child(odd) > td, .table-striped tbody > tr:nth-child(odd) > th {
+        background-color: #fff;
+      }
     </style>
+
     <link href="includes/css/vendor/bootstrap-responsive.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -66,6 +94,7 @@
               <li class="active"><a href="#nutshell">Nutshell</a></li>
               <li><a href="#dayPrecipitation">Next 24 Hours</a></li>
               <li><a href="#hourPrecipitation">Next Hour</a></li>
+              <li><a href="#chart">Charts</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -74,50 +103,81 @@
 
 	<div class="container-fluid">
 
-		<div class="row-fluid">
-			<div id="nutshell" class="span5">
-        <div id="hour-intensity"></div>
-        <dl id="updateIn">
-          <dt>Refresh</dt>
-          <dd></dd>
-        </dl>
-				<dl id="isPrecipitating">
-					<dt>Precipitation</dt>
-					<dd></dd>
-				</dl>
-				<dl id="currentTemp">
-					<dt>Current Temp</dt>
-					<dd></dd>
-				</dl>
-				<dl id="currentSummary">
-					<dt>Current Summary</dt>
-					<dd></dd>
-				</dl>
-				<dl id="daySummary">
-					<dt>Day Summary</dt>
-					<dd></dd>
-				</dl>
-				<dl id="hourSummary">
-					<dt>Hour Summary</dt>
-					<dd></dd>
-				</dl>
-        <dl id="currentIntensity">
-          <dt>Current Intensity</dt>
-          <dd></dd>
-        </dl>
-				<dl id="intensityExplanation">
-					<dt>Intensity Values</dt>
-					<dd>0-2: None</dd><dd>2-15: Sporadic</dd><dd>15-30: Light</dd><dd>30-45: Moderate</dd><dd>45-75: Heavy</dd>
-				</dl>
-			</div>
-      <div id="dayPrecipitation" class="span5 hide">
-        <div id="next-twenty-four-percent"></div>
-        <!-- <div id="dayPrecipitation"></div> -->
-      </div>
-			<div id="hourPrecipitation" class="span5 hide">
-        <div id="day-percent"></div>
+		<div class="row-fluid google-fontify">
+      <div id="nutshell" class="text-center tab-raphael span3 active">
+        <div id="now">
+          <h2>NOW</h2>
+          <p id="currentTemp"></p>
+          <p id="currentSummary"></p>
+        </div>
 
-				<!-- <div id="hourPrecipitation"></div> -->
+        <hr>
+
+        <div id="next-hour">
+          <h2>NEXT HOUR</h2>
+          <p id="hourSummary"></p>
+        </div>
+
+        <hr>
+
+        <div id="">
+          <h3>INTENSITY</h3>
+          <p id="currentIntensity"></p>
+        </div>
+
+        <hr>
+
+        <div id="">
+          <h3>DAY SUMMARY</h3>
+          <p id="daySummary"></p>
+        </div>
+
+        <hr>
+
+        <div id="">
+          <h4>REFRESH</h4>
+          <p id="updateIn"></p>
+        </div>
+
+        <hr>
+
+        <div id="">
+          <h4>PRECIPITATION</h4>
+          <p id="isPrecipitating"></p>
+        </div>
+
+        <hr>
+
+        <div id="">
+          <h4>INTENSITY VALUES</h4>
+          <p id="intensityExplanation">
+            0-2: None<br>
+            2-15: Sporadic<br>
+            15-30: Light<br>
+            30-45: Moderate<br>
+            45-75: Heavy
+          </p>
+        </div>
+      </div>
+      <div id="dayPrecipitation" class="tab-raphael span3">
+        <table class="table table-striped table-condensed text-center">
+          <thead><tr><th>Time</th><th>Probability</th><th>Type</th><th>Humidity</th><th>Cloud Cover</th></tr></thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <div id="hourPrecipitation" class="tab-raphael span3">
+        <table class="table table-striped table-condensed text-center">
+          <thead><tr><th>Time</th><th>Temp</th><th>Probability</th><th>Intensity (error)</th></tr></thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+			<div id="chart" class="tab-raphael span3">
+        <div id="raphael"></div>
+        <!-- <div id="hour-intensity"></div>
+        <div id="next-twenty-four-percent"></div>
+        <div id="day-percent"></div> -->
 			</div>
 		</div>
 
@@ -147,6 +207,7 @@
     <script src="includes/js/vendor/g.raphael-min.js"></script>
     <!-- <script src="includes/js/vendor/g.pie-min.js"></script> -->
     <script src="includes/js/vendor/g.line-min.js"></script>
+    <script src="includes/js/vendor/g.dot-min.js"></script>
     <script src="includes/js/vendor/moment.min.js"></script>
 <?php if( IS_DEBUG ): ?>
     <script src="includes/js/main.js"></script>
